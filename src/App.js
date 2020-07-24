@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import{ Route, Switch } from 'react-router-dom'
 import Home from './Home'
+import AnimePage from './AnimePage'
 
 
 const API = 'http://localhost:3000/animes'
@@ -21,13 +22,13 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state)
     return (
       <div>
         {/* <Navbar /> */}
         <Switch>
           <Route exact path="/" render={routerProps => <Home {...routerProps} animes={this.state.animes}/>}/>
-          {/* <Route path="/Anime/:id" render={routerProps => <AnimePage {...routerProps} animes={this.state.animes}/>}/>
+          <Route path="/Anime/:id" render={routerProps => <AnimePage {...routerProps} animes={this.state.animes}/>}/>
+          {/* 
           <Route path="/Profile" component={Profile}/>
           <Route path="/Anime/Edit" component={AnimeForm}/>
           <Route path="/Login" component={Auth}/> */}
