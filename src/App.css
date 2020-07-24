@@ -78,7 +78,7 @@
 }
 
 .rating label input {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   opacity: 0;
@@ -95,12 +95,12 @@
 
 .rating:not(:hover) label input:checked ~ .icon,
 .rating:hover label:hover input ~ .icon {
-  color: #09f;
+  color: gold;
 }
 
 .rating label input:focus:not(:checked) ~ .icon:last-child {
   color: #000;
-  text-shadow: 0 0 5px #09f;
+  text-shadow: 0 0 5px gold;
 }
 .card{
   height: 23em;
@@ -115,11 +115,11 @@
   align-items: center;
 }
 
-/* .card:hover{
+.card:hover{
   -webkit-box-shadow: 3px 14px 5px -5px rgba(0,0,0,0.41);
   -moz-box-shadow: 3px 14px 5px -5px rgba(0,0,0,0.41);
   box-shadow: 3px 14px 5px -5px rgba(0,0,0,0.41);
-} */
+}
 
 .card img{
   height: 14em;
@@ -141,8 +141,9 @@
   margin: 2em 4em;
 }
 .form-div{
-  margin: 1em 1em;
-  padding: 1em 0em;
+  margin: -1.5em 1em;
+  margin: auto;
+  padding: 0em 0em;
   padding-right: 2em;
 }
 
@@ -151,3 +152,17 @@
   margin: auto;
   margin-top: 5%;
 }
+
+.review-card{
+  width: 100%;
+  margin: auto;
+  margin-top:2em;
+
+}
+.review-card img{
+  height: 5em;
+  width: 5em;
+  border-radius: 50%;
+  display: inline-block;
+}
+

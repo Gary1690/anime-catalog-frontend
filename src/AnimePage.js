@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import ReviewForm from './ReviewForm';
+import ReviewCard from './ReviewCard';
 
 export default class AnimePage extends Component {
   state =  {
@@ -36,7 +37,8 @@ export default class AnimePage extends Component {
             </div>
           </div>
           <div className="row">
-              <ReviewForm/>
+              <ReviewCard/>
+              <ReviewForm animeId={id}/>
           </div>
       </div>
     )

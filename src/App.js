@@ -17,8 +17,9 @@ class App extends React.Component {
   componentDidMount(){
     fetch(API)
     .then(resp => resp.json())
-    .then(animes =>
-      this.setState({ animes }))
+    .then(animes =>this.setState({ animes }))
+
+    window.localStorage.setItem("userId",2)
   }
 
   render() {
