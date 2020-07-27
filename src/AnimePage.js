@@ -27,7 +27,7 @@ export default class AnimePage extends Component {
   }
 
   render() {
-    console.log("AnimePage State",this.state);
+    console.log("AnimePage props", this.props);
     const {id,title,img_url,description,get_rating,screen,age_rating,reviews} = this.state
     return (
       <div className="anime-wrapper">
@@ -41,7 +41,7 @@ export default class AnimePage extends Component {
                 <h4>Audience: {age_rating}</h4>
                 <h4>Rating: {get_rating}</h4>
                 <p>{description}</p>
-                <p></p>
+                <button className="btn btn-sm btn btn-outline-primary" onClick={() => this.props.handleFavorite(id, this.props.history)}>Favorite 💙</button>
             </div>
           </div>
           <div className="row">

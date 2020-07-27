@@ -171,3 +171,29 @@ h1 {
   text-align: center;
 }
 
+.cardbtns {
+  display: inline-flex;
+  float: left;
+}
+
+.login-form {
+  width: 40%;
+  margin: auto;
+  padding-top: 5em;
+}
+
+.profile-img {
+  height: 10em;
+  width: 10em;
+  margin: auto;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  margin-left: 4em;
+  border-radius: 50%;
+}
+
+.profile-header {
+  display: inline-block;
+  text-align: left;
+  margin-top: 2em;
+}
