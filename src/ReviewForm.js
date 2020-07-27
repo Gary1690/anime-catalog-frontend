@@ -28,7 +28,12 @@ class ReviewForm extends React.Component  {
 
     fetch('http://localhost:3000/reviews',serverData)
     .then(resp=> resp.json())
-    .then(review=>console.log(review))
+    .then(review=> this.props.addReview(review))
+    .then(this.setState({
+      content:"",
+      rating:"0"
+    }
+    ))
   }
 
   render(){

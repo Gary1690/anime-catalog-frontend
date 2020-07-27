@@ -113,6 +113,7 @@
   border-style: solid;
   display: inline-flex;
   align-items: center;
+  float: left;
 }
 
 .card:hover{
@@ -164,5 +165,9 @@
   width: 5em;
   border-radius: 50%;
   display: inline-block;
+}
+
+h1 {
+  text-align: center;
 }
 

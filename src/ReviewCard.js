@@ -2,26 +2,25 @@ import React from 'react'
 
 const ReviewCard = (props) => {
   
-  
+  console.log("Review Card Props", props)
+
   return(
+    
     <div className="review-card row show-me-border">
         <div className="col-1" style={{textAlign:"center"}}>
           <img 
-          src="https://images.vexels.com/media/users/3/145908/preview2/52eabf633ca6414e60a7677b0b917d92-male-avatar-maker.jpg"
+          src={props.user.img_url}
           alt="random user"
           />
-          <span><strong>Admin</strong></span>
+          <span><strong>{props.user.username}</strong></span>
         </div>
         <div className="col-9">
           <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eleifend 
-          ullamcorper nisi, non eleifend ipsum venenatis et. Duis sit amet massa euismod,
-          laoreet lorem at, aliquet nisi. Donec laoreet, libero id auctor sagittis, justo 
-          turpis facilisis ante, ac scelerisque augue ipsum quis elit. 
+          {props.content}
           </p>
         </div>
         <div className="col-2">
-          <span>★★★★★</span>
+        <span>{"★".repeat(props.rating)}</span>
         </div>
        
     </div>
@@ -29,3 +28,5 @@ const ReviewCard = (props) => {
 }
 
 export default ReviewCard;
+
+// ★★★★★

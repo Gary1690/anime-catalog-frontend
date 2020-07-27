@@ -8,7 +8,7 @@ export default class AnimePage extends Component {
     title:"",
     img_url:"",
     description:"",
-    rating:0,
+    get_rating:0,
     screen:"",
     age_rating:"",
     reviews:[]
@@ -19,9 +19,16 @@ export default class AnimePage extends Component {
     .then(resp=>resp.json())
     .then(anime => this.setState(anime))
   }
+
+  addReview = (newReview) => {
+    this.setState({
+      reviews: [...this.state.reviews, newReview],
+      get_rating: newReview.anime_rating})
+  }
+
   render() {
     console.log("AnimePage State",this.state);
-    const {id,title,img_url,description,rating,screen,age_rating,reviews} = this.state
+    const {id,title,img_url,description,get_rating,screen,age_rating,reviews} = this.state
     return (
       <div className="anime-wrapper">
           <div className="row show-me-border anime-detail">
@@ -32,14 +39,14 @@ export default class AnimePage extends Component {
                 <h2>{title}</h2>
                 <h4>Screen: {screen}</h4>
                 <h4>Audience: {age_rating}</h4>
-                <h4>Rating: {rating}</h4>
+                <h4>Rating: {get_rating}</h4>
                 <p>{description}</p>
                 <p></p>
             </div>
           </div>
           <div className="row">
-              <ReviewCard/>
-              <ReviewForm animeId={id}/>
+              {this.state.reviews.map(review => <ReviewCard key={review.id} {...review}/>)}
+              <ReviewForm animeId={id} addReview={this.addReview}/>
           </div>
       </div>
     )

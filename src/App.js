@@ -4,6 +4,7 @@ import './App.css';
 import{ Route, Switch } from 'react-router-dom'
 import Home from './Home'
 import AnimePage from './AnimePage'
+import NavBar from './Navbar'
 
 
 const API = 'http://localhost:3000/animes'
@@ -19,13 +20,13 @@ class App extends React.Component {
     .then(resp => resp.json())
     .then(animes =>this.setState({ animes }))
 
-    window.localStorage.setItem("userId",2)
+    window.localStorage.setItem("userId",4)
   }
 
   render() {
     return (
       <div>
-        {/* <Navbar /> */}
+        <NavBar />
         <Switch>
           <Route exact path="/" render={routerProps => <Home {...routerProps} animes={this.state.animes}/>}/>
           <Route path="/Anime/:id" render={routerProps => <AnimePage {...routerProps} animes={this.state.animes}/>}/>
