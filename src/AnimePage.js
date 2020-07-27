@@ -3,7 +3,7 @@ import ReviewForm from './ReviewForm';
 
 export default class AnimePage extends Component {
   state =  {
-    id: "",
+    id: "", 
     title:"",
     img_url:"",
     description:"",
@@ -33,6 +33,7 @@ export default class AnimePage extends Component {
                 <h4>Audience: {age_rating}</h4>
                 <h4>Rating: {rating}</h4>
                 <p>{description}</p>
+                <p></p>
             </div>
           </div>
           <div className="row">
