@@ -16,26 +16,40 @@ class ReviewForm extends React.Component  {
     review.rating = parseInt(this.state.rating)
     review.anime_id = this.props.animeId
     review.user_id = parseInt(window.localStorage.getItem('userId'))
+    if (!review.user_id){
+      alert("You must be logged in to leave a comment!")
+      this.props.history.push("/login")
+    }else if (!this.validateForm()){
+      alert("All fields must be completed before submission")
+    }else{
+      const serverData = {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'Accept':'application/json'
+        },
+        body:JSON.stringify(review)
+      }
 
-    const serverData = {
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'Accept':'application/json'
-      },
-      body:JSON.stringify(review)
+      fetch('http://localhost:3000/reviews',serverData)
+      .then(resp=> resp.json())
+      .then(review=> this.props.addReview(review))
+      .then(this.setState({
+        content:"",
+        rating:"0"
+      }
+      ))
     }
-
-    fetch('http://localhost:3000/reviews',serverData)
-    .then(resp=> resp.json())
-    .then(review=> this.props.addReview(review))
-    .then(this.setState({
-      content:"",
-      rating:"0"
-    }
-    ))
   }
 
+  validateForm = ()=>{
+    const {content,rating} =  this.state
+    if (content==="" || rating === "0"){
+      return false
+    }
+    return true
+  }
+  
   render(){
     const {content,rating} = this.state;
     console.log(this.state);

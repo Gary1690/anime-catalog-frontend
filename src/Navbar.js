@@ -1,11 +1,10 @@
 import React from 'react'
-import { NavLink, Link } from 'react-router-dom';
+import {Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Nav, Navbar, FormControl, Form} from 'react-bootstrap'
 
 const NavBar = (props) => {
-
     return(
         <>
             <Navbar bg="dark" variant="dark">
@@ -16,7 +15,15 @@ const NavBar = (props) => {
                 </Nav>
                 <Form inline>
                 <FormControl type="text" placeholder="Search" className="mr-sm-2" value={props.filter} onChange={props.handleSearch}/>
-                <Button variant="outline-info">Log Out</Button>
+                {
+                    props.user
+                    ? 
+                    <Button variant="outline-info" onClick={props.handleLogout}>Log Out</Button>
+                    :
+                    <Nav.Link as={Link} to="/login">
+                        <Button variant="outline-info">Log In</Button>
+                    </Nav.Link>
+                }    
                 </Form>
             </Navbar>
         </>

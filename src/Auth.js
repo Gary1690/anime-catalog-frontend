@@ -12,7 +12,7 @@ class Auth extends React.Component {
     render() {
         return(
             <>
-                {this.state.isNewUser? <Signup handleUser={this.handleUser} history={this.props.history} toggleNewUser={this.toggleNewUser}/> : <Login handleUser={this.handleUser} history={this.props.history} toggleNewUser={this.toggleNewUser}/>}
+                {this.state.isNewUser? <Signup handleUser={this.props.handleUser} history={this.props.history} toggleNewUser={this.toggleNewUser}/> : <Login handleUser={this.props.handleUser} history={this.props.history} toggleNewUser={this.toggleNewUser}/>}
             </>
         )
     }

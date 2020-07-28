@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReviewForm from './ReviewForm';
 import ReviewCard from './ReviewCard';
+import AnimeModal from './AnimeModal';
 
 export default class AnimePage extends Component {
   state =  {
@@ -11,8 +12,12 @@ export default class AnimePage extends Component {
     get_rating:0,
     screen:"",
     age_rating:"",
-    reviews:[]
+    reviews:[],
+    showModal:false
   }
+
+  toggleModal = () => this.setState( prevState => ({showModal:!prevState.showModal}));
+
   componentDidMount(){
     const id = this.props.match.params.id
     fetch(`http://localhost:3000/animes/${id}`)
@@ -36,19 +41,21 @@ export default class AnimePage extends Component {
               <img src={img_url} alt={title}/>
             </div>
             <div className="col-md-8 show-me-border">
-                <h2>{title}</h2>
+                <h2>{title} <button className="btn btn-outline-success" onClick={this.toggleModal}>✎</button></h2>
                 <h4>Screen: {screen}</h4>
                 <h4>Audience: {age_rating}</h4>
                 <h4>Rating: {get_rating}</h4>
                 <p>{description}</p>
-                <button className="btn btn-sm btn btn-outline-primary" onClick={() => this.props.handleFavorite(id, this.props.history)}>Favorite 💙</button>
+                <button className="btn btn-sm btn btn-outline-primary" onClick={() => this.props.handleFavorite(id, this.props.history)}>Favorite <span role="img">💙</span></button>
             </div>
           </div>
           <div className="row">
               {this.state.reviews.map(review => <ReviewCard key={review.id} {...review}/>)}
-              <ReviewForm animeId={id} addReview={this.addReview}/>
+              <ReviewForm animeId={id} addReview={this.addReview} history={this.props.history}/>
           </div>
+          <AnimeModal show={this.state.showModal} toggleModal={this.toggleModal}/>
       </div>
+      
     )
   }
 }

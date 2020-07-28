@@ -28,9 +28,14 @@ class Login extends React.Component {
         )
         .then(resp => resp.json())
         .then(user => {
-            window.localStorage.setItem("userId", user.id)
-            this.props.handleUser(user)
-            this.props.history.push('/profile')
+            if(user){
+                window.localStorage.setItem("userId", user.id)
+                this.props.handleUser(user)
+                this.props.history.push('/profile')
+            }else{
+                alert('Credentials did not match!')
+            }
+          
         })
         .then(this.setState({
             username: "",
