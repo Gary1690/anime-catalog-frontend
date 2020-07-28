@@ -52,7 +52,6 @@ class ReviewForm extends React.Component  {
   
   render(){
     const {content,rating} = this.state;
-    console.log(this.state);
     return(
       <div className="col-12 form-div show-me-border">
         <form className="" onSubmit={this.submitHanlder}>

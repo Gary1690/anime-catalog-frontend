@@ -28,7 +28,7 @@ const Profile = (props) => {
             <h1>My Favorites</h1>
             
             <div className="row">
-                {props.user.animes.length ? props.user.animes.map(userAnime => <AnimeCard key={userAnime.id} {...userAnime} history={props.history}/>) : <EmptyList {...props}/>}
+                {props.animes.length ? props.animes.map(userAnime => <AnimeCard key={userAnime.id} {...userAnime} history={props.history}/>) : <EmptyList {...props}/>}
             </div>
             
        </div> 

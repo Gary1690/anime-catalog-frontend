@@ -1,12 +1,10 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import{  Redirect,Route, Switch } from 'react-router-dom'
+import {Redirect,Route,Switch} from 'react-router-dom'
 import Home from './Home'
 import AnimePage from './AnimePage'
 import NavBar from './Navbar'
 import Profile from './Profile'
-import Login from './Login'
 import Auth from './Auth'
 
 
@@ -43,6 +41,15 @@ class App extends React.Component {
     window.localStorage.removeItem("userId")
   }
 
+  updateAnimeList = (updatedAnime) =>{
+    const animes = this.state.animes.map (anime=>{
+      if( anime.id === updatedAnime.id){
+        return updatedAnime
+      }
+      return anime
+    })
+    this.setState({animes:animes})
+  }
 
   handleFavorite = (anime_id, history) => {
     const user_id = parseInt(window.localStorage.getItem("userId"))
@@ -65,9 +72,9 @@ class App extends React.Component {
       .then(favorite => {
         history.push("/profile")
         this.setState( prevState =>{
-          if(!prevState.user.animes.find(a=> a.id === favorite.anime.id)){
+          if(!prevState.user.my_anime_ids.find(id=> id === favorite.anime.id)){
             const newState = {...prevState}
-            newState.user.animes = [...prevState.user.animes,favorite.anime]
+            newState.user.my_anime_ids = [...prevState.user.my_anime_ids,favorite.anime.id]
             return newState
           }
           return prevState
@@ -76,16 +83,31 @@ class App extends React.Component {
     }
   }
 
+  deleteAnime = (deletedAnime)=>{
+    const animeList =  this.state.animes.filter( anime=> anime.id !== deletedAnime.id)
+    this.setState({animes:animeList}) 
+  }
+
+  currentUserfavorites =()=>{
+    if(this.state.user){
+      return this.state.animes.filter( anime =>{
+        if (this.state.user.my_anime_ids.includes(anime.id)){
+          return anime
+        }
+      })
+    }
+    return null 
+  }
+
   render() {
     let animesToDisplay = this.filterBy()
-    console.log("app",this.state.user)
     return (
       <div>
         <NavBar filter={this.state.filter} handleSearch={this.handleSearch} handleLogout={this.handleLogout} user={this.state.user}/>
         <Switch>
           <Route exact path="/" render={routerProps => <Home {...routerProps} animes={animesToDisplay}/>}/>
-          <Route path="/Anime/:id" render={routerProps => <AnimePage {...routerProps} animes={this.state.animes} handleFavorite={this.handleFavorite}/>}/>
-          <Route path="/Profile" render={routerProps => this.state.user ? <Profile {...routerProps} user={this.state.user}/>:<Redirect to="/login" />}/>
+          <Route path="/Anime/:id" render={routerProps => <AnimePage {...routerProps} deleteAnime={this.deleteAnime} updateAnimeList={this.updateAnimeList} animes={this.state.animes} handleFavorite={this.handleFavorite}/>}/>
+          <Route path="/Profile" render={routerProps => this.state.user ? <Profile {...routerProps} user={this.state.user} animes={this.currentUserfavorites()}/>:<Redirect to="/login" />}/>
           <Route path="/Login" render={routerProps => <Auth {...routerProps} handleUser={this.handleUser}/>}/> 
           {/* 
           <Route path="/Anime/Edit" component={AnimeForm}/>
