@@ -1,7 +1,7 @@
 import React from 'react'
 
 const ReviewCard = (props) => {
-  
+  const currentUserId =  props.currentUserId
   return(
     <div className="review-card row show-me-border">
         <div className="col-1" style={{textAlign:"center"}}>
@@ -19,12 +19,28 @@ const ReviewCard = (props) => {
         <div className="col-2">
           <span>{"★".repeat(props.rating)}</span>
         </div>
+        
         <div className="col-1">
-          <button style={{marginLeft:"0.2em"}} className="btn btn-outline-success">✎</button>
-          <button 
-            style={{marginLeft:"0.2em"}} 
-            className="btn btn-outline-danger"
-            onClick={()=>{props.deleteReview(props.id)}}>⨂</button>
+          {
+            currentUserId === props.user_id 
+            ?
+            <>
+            <button 
+              style={{marginLeft:"0.2em"}} 
+              onClick={()=>props.editReview(props.id) }
+              className="btn btn-outline-success">
+                ✎
+            </button>
+            <button 
+              style={{marginLeft:"0.2em"}} 
+              className="btn btn-outline-danger"
+              onClick={()=>{props.deleteReview(props.id)}}>
+              ⨂
+            </button>
+            </>
+            :
+            null
+            }
         </div>
     </div>
   )

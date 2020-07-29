@@ -2,20 +2,23 @@ import React from 'react'
 
 class ReviewForm extends React.Component  {
   state = {
+    id:"",
     content:"",
     rating:"0"
   }
+
   changeHandler = (e) =>{
     this.setState({[e.target.name]:e.target.value})
   }
   
   submitHanlder = (e) =>{
     e.preventDefault()
+    const currentReviewId = this.state.id
     const review = {}
     review.content = this.state.content
     review.rating = parseInt(this.state.rating)
     review.anime_id = this.props.animeId
-    review.user_id = parseInt(window.localStorage.getItem('userId'))
+    review.user_id = this.props.currentUserId
     if (!review.user_id){
       alert("You must be logged in to leave a comment!")
       this.props.history.push("/login")
@@ -23,7 +26,7 @@ class ReviewForm extends React.Component  {
       alert("All fields must be completed before submission")
     }else{
       const serverData = {
-        method:'POST',
+        method:(currentReviewId ? 'PATCH' : 'POST'),
         headers:{
           'Content-Type':'application/json',
           'Accept':'application/json'
@@ -31,14 +34,16 @@ class ReviewForm extends React.Component  {
         body:JSON.stringify(review)
       }
 
-      fetch('http://localhost:3000/reviews',serverData)
+      fetch(`http://localhost:3000/reviews/${currentReviewId}`,serverData)
       .then(resp=> resp.json())
-      .then(review=> this.props.addReview(review))
-      .then(this.setState({
-        content:"",
-        rating:"0"
-      }
-      ))
+      .then(review=> currentReviewId? this.props.updateReview(review) : this.props.addReview(review))
+      .then(
+        this.setState({
+          id:"",
+          content:"",
+          rating:"0"
+        })
+      )
     }
   }
 
@@ -49,9 +54,30 @@ class ReviewForm extends React.Component  {
     }
     return true
   }
+
+  componentDidUpdate(prevProps){
+    if ((this.props.reviewToBeEdited && this.props.reviewToBeEdited.id !== this.state.id)){
+      const {id,content,rating} = this.props.reviewToBeEdited
+      const newState =  { 
+        id:id,
+        content:content,
+        rating:String(rating)
+      }
+      this.setState(newState)
+    }
+
+    if (!this.props.reviewToBeEdited && this.state.id !== ''){
+      this.setState({
+        id:"",
+        content:"",
+        rating:"0"
+      })
+    }
+  } 
   
   render(){
     const {content,rating} = this.state;
+    console.log(this.state);
     return(
       <div className="col-12 form-div show-me-border">
         <form className="" onSubmit={this.submitHanlder}>

@@ -6,6 +6,7 @@ import AnimePage from './AnimePage'
 import NavBar from './Navbar'
 import Profile from './Profile'
 import Auth from './Auth'
+import NoMatch from './NoMatch'
 
 
 const API = 'http://localhost:3000/animes'
@@ -21,7 +22,14 @@ class App extends React.Component {
   componentDidMount(){
     fetch(API)
     .then(resp => resp.json())
-    .then(animes =>this.setState({ animes }))
+    .then(animes =>{
+      const loggedUser= JSON.parse(window.localStorage.getItem("user"))
+      if(loggedUser){
+        console.log("Logged user",loggedUser)
+      }
+      this.setState({ animes:animes,user:loggedUser})
+    })
+    
   }
 
   handleSearch = (e) => {
@@ -52,8 +60,8 @@ class App extends React.Component {
   }
 
   handleFavorite = (anime_id, history) => {
-    const user_id = parseInt(window.localStorage.getItem("userId"))
-    if(!user_id){
+    
+    if(!this.state.user){
       alert("You must be logged in to add it to your favorites")
       history.push("/login")
     }else{
@@ -64,7 +72,7 @@ class App extends React.Component {
           'Accept':'application/json'
         },
         body:JSON.stringify({
-          user_id,
+          user_id:this.state.user.id,
           anime_id
         })
       })
@@ -106,12 +114,13 @@ class App extends React.Component {
         <NavBar filter={this.state.filter} handleSearch={this.handleSearch} handleLogout={this.handleLogout} user={this.state.user}/>
         <Switch>
           <Route exact path="/" render={routerProps => <Home {...routerProps} animes={animesToDisplay}/>}/>
-          <Route path="/Anime/:id" render={routerProps => <AnimePage {...routerProps} deleteAnime={this.deleteAnime} updateAnimeList={this.updateAnimeList} animes={this.state.animes} handleFavorite={this.handleFavorite}/>}/>
-          <Route path="/Profile" render={routerProps => this.state.user ? <Profile {...routerProps} user={this.state.user} animes={this.currentUserfavorites()}/>:<Redirect to="/login" />}/>
-          <Route path="/Login" render={routerProps => <Auth {...routerProps} handleUser={this.handleUser}/>}/> 
-          {/* 
-          <Route path="/Anime/Edit" component={AnimeForm}/>
-          */}
+          <Route exact path="/Anime/:id" render={routerProps => <AnimePage user={this.state.user} {...routerProps} deleteAnime={this.deleteAnime} updateAnimeList={this.updateAnimeList} animes={this.state.animes} handleFavorite={this.handleFavorite}/>}/>
+          <Route exact path="/Profile" render={routerProps => this.state.user ? <Profile {...routerProps} user={this.state.user} animes={this.currentUserfavorites()}/>:<Redirect to="/login" />}/>
+          <Route exact path="/Login" render={routerProps => !this.state.user ? <Auth {...routerProps} handleUser={this.handleUser}/>:<Redirect to="/profile" />}/> 
+          <Route path="*" component={NoMatch}/>
+   
+          {/* <Route path="/Login" render={routerProps => <Auth {...routerProps} user={this.state.user} handleUser={this.handleUser}/>}/>  */}
+
         </Switch>
       </div>
     )
@@ -119,19 +128,3 @@ class App extends React.Component {
 }
 
 export default App;
-
-// function PrivateRoute({ children, ...rest }) {
-//   return (
-//     <Route  {...rest} render={({ location }) =>
-//         fakeAuth.isAuthenticated ? (children) : (
-//           <Redirect
-//             to={{
-//               pathname: "/login",
-//               state: { from: location }
-//             }}
-//           />
-//         )
-//       }
-//     />
-//   );
-// }

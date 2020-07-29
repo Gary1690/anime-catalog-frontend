@@ -2,7 +2,7 @@ import React from 'react'
 import AnimeCard from './AnimeCard'
 
 const Home = props => {
-    console.log(props)
+    
     return (
         <>
             <h1>Anime Collection</h1>
@@ -14,3 +14,4 @@ const Home = props => {
 }
 
 export default Home
+

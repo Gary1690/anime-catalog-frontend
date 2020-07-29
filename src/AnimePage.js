@@ -15,6 +15,7 @@ export default class AnimePage extends Component {
     age_rating:"",
     reviews:[],
     showModal:false,
+    editReviewId:null
   }
 
   toggleModal = () => this.setState( prevState => ({showModal:!prevState.showModal}));
@@ -23,7 +24,13 @@ export default class AnimePage extends Component {
     const id = this.props.match.params.id
     fetch(`http://localhost:3000/animes/${id}`)
     .then(resp=>resp.json())
-    .then(anime => this.setState(anime))
+    .then(anime => {
+      if(anime.error){
+        this.props.history.push('/NoMatch ')
+      }else{
+        this.setState(anime)
+      }
+    })
   }
 
   addReview = (newReview) => {
@@ -32,12 +39,31 @@ export default class AnimePage extends Component {
       get_rating: newReview.anime_rating})
   }
 
+  updateReview = (updatedReview) =>{
+    const newReviews = this.state.reviews.map ( review =>{
+      if(review.id === updatedReview.id){
+        return updatedReview
+      }
+      return review
+    })
+
+    this.setState({
+      reviews: newReviews,
+      get_rating: updatedReview.anime_rating,
+      editReviewId:null
+    })
+  }
+
   updateAnimePage = (anime) =>{
     this.setState(anime)
   }
 
   handleSubmit = (e) =>{
     e.preventDefault()
+  }
+
+  editReview = (id) => {
+    this.setState({editReviewId:id})
   }
 
   deleteAnime = ()=>{
@@ -72,6 +98,9 @@ export default class AnimePage extends Component {
 
   render() {
     const {id,title,img_url,description,get_rating,screen,age_rating,reviews} = this.state
+    const user = this.props.user
+    const reviewToBeEdited = this.state.editReviewId ? reviews.find(r => r.id === this.state.editReviewId) : null;
+    console.log(reviewToBeEdited);
     return (
       
       <div className="anime-wrapper">
@@ -81,8 +110,16 @@ export default class AnimePage extends Component {
             </div>
             <div className="col-lg-8 show-me-border">
                 <h2 style={{display:"block"}}>{title} 
-                  <button style={{marginLeft:"0.2em"}} className="btn btn-outline-success" onClick={this.toggleModal}>✎</button>
-                  <button style={{marginLeft:"0.2em"}}  className="btn btn-outline-danger" onClick={this.deleteAnime}>⨂</button>
+                  {
+                  user && user.username === "Admin"
+                  ?
+                  <>
+                    <button style={{marginLeft:"0.2em"}} className="btn btn-outline-success" onClick={this.toggleModal}>✎</button>
+                    <button style={{marginLeft:"0.2em"}}  className="btn btn-outline-danger" onClick={this.deleteAnime}>⨂</button>
+                  </>
+                    :
+                    null
+                  }
                 </h2>
                 <h4>Screen: {screen}</h4>
                 <h4>Audience: {age_rating}</h4>
@@ -92,8 +129,8 @@ export default class AnimePage extends Component {
             </div>
           </div>
           <div className="row">
-              {reviews.map(review => <ReviewCard key={review.id} {...review} deleteReview={this.deleteReview}/>)}
-              <ReviewForm animeId={id} addReview={this.addReview} history={this.props.history}/>
+              {reviews.map(review => <ReviewCard key={review.id} editReview={this.editReview } {...review} currentUserId={user?user.id:null} deleteReview={this.deleteReview}/>)}
+              <ReviewForm animeId={id} reviewToBeEdited ={reviewToBeEdited} addReview={this.addReview} currentUserId={user?user.id:null}  updateReview ={this.updateReview} history={this.props.history}/>
           </div>
           <AnimeModal 
             show={this.state.showModal}

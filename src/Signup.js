@@ -35,9 +35,14 @@ class Signup extends React.Component {
             )
             .then(resp => resp.json())
             .then(user => {
-                window.localStorage.setItem("userId", user.id)
-                this.props.handleUser(user)
-                this.props.history.push('/profile')
+                if(user.id){
+                    window.localStorage.setItem("user", JSON.stringify(user))
+                    this.props.handleUser(user)
+                    this.props.history.push('/profile')
+                }else{
+                    alert ("Username is already in used.")
+                }
+               
             })
             .then(this.setState({
                 username: "",
