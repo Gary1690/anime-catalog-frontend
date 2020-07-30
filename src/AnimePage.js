@@ -125,7 +125,13 @@ export default class AnimePage extends Component {
                 <h4>Audience: {age_rating}</h4>
                 <h4>Rating: {get_rating}</h4>
                 <p>{description}</p>
-                <button className="btn btn-sm btn btn-outline-primary" onClick={() => this.props.handleFavorite(id, this.props.history)}>Favorite <span role="img">💙</span></button>
+                {
+                user && user.my_anime_ids.includes(id)
+                ?
+                <button className="btn btn-sm btn btn-outline-danger" onClick={() => this.props.handleUnfavorite(id)}>Unfavorite <span role="img">💔</span></button>
+                :  
+                <button className="btn btn-sm btn btn-outline-primary" onClick={() => this.props.handleFavorite(id,this.props.history)}>Favorite <span role="img">💙</span></button>
+                }
             </div>
           </div>
           <div className="row">

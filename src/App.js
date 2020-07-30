@@ -23,13 +23,9 @@ class App extends React.Component {
     fetch(API)
     .then(resp => resp.json())
     .then(animes =>{
-      const loggedUser= JSON.parse(window.localStorage.getItem("user"))
-      if(loggedUser){
-        console.log("Logged user",loggedUser)
-      }
-      this.setState({ animes:animes,user:loggedUser})
+      const user = JSON.parse(window.localStorage.getItem('user')) 
+      this.setState(prevState => ({...prevState,animes:animes,user:user}))
     })
-    
   }
 
   handleSearch = (e) => {
@@ -59,7 +55,33 @@ class App extends React.Component {
     this.setState({animes:animes})
   }
 
-  handleFavorite = (anime_id, history) => {
+  handleUnfavorite = (anime_id) => {
+    const user = this.state.user
+    fetch(`http://localhost:3000/favorites/${user.id}` , {
+      method:'DELETE',
+      headers:{
+        'Content-Type':'application/json',
+        'Accept':'application/json'
+      },
+      body:JSON.stringify({
+        user_id:user.id,
+        anime_id
+      })
+    })
+    .then(resp=> resp.json())
+    .then(favorite=> {
+      const userNewFavoriteAnimeIds = user.my_anime_ids.filter(id => id!==favorite.anime.id)
+      this.setState(prevState => {
+        const user = {...prevState.user}
+        user.my_anime_ids = userNewFavoriteAnimeIds
+        window.localStorage.setItem("user", JSON.stringify(user))
+        return {...prevState,user:user}
+      })
+    })
+
+  }
+
+  handleFavorite = (anime_id,history) => {
     
     if(!this.state.user){
       alert("You must be logged in to add it to your favorites")
@@ -78,11 +100,11 @@ class App extends React.Component {
       })
       .then(resp => resp.json())
       .then(favorite => {
-        history.push("/profile")
         this.setState( prevState =>{
           if(!prevState.user.my_anime_ids.find(id=> id === favorite.anime.id)){
             const newState = {...prevState}
             newState.user.my_anime_ids = [...prevState.user.my_anime_ids,favorite.anime.id]
+            window.localStorage.setItem("user", JSON.stringify(newState.user))
             return newState
           }
           return prevState
@@ -114,7 +136,7 @@ class App extends React.Component {
         <NavBar filter={this.state.filter} handleSearch={this.handleSearch} handleLogout={this.handleLogout} user={this.state.user}/>
         <Switch>
           <Route exact path="/" render={routerProps => <Home {...routerProps} animes={animesToDisplay}/>}/>
-          <Route exact path="/Anime/:id" render={routerProps => <AnimePage user={this.state.user} {...routerProps} deleteAnime={this.deleteAnime} updateAnimeList={this.updateAnimeList} animes={this.state.animes} handleFavorite={this.handleFavorite}/>}/>
+          <Route exact path="/Anime/:id" render={routerProps => <AnimePage user={this.state.user} handleUnfavorite={this.handleUnfavorite} {...routerProps} deleteAnime={this.deleteAnime} updateAnimeList={this.updateAnimeList} animes={this.state.animes} handleFavorite={this.handleFavorite}/>}/>
           <Route exact path="/Profile" render={routerProps => this.state.user ? <Profile {...routerProps} user={this.state.user} animes={this.currentUserfavorites()}/>:<Redirect to="/login" />}/>
           <Route exact path="/Login" render={routerProps => !this.state.user ? <Auth {...routerProps} handleUser={this.handleUser}/>:<Redirect to="/profile" />}/> 
           <Route path="*" component={NoMatch}/>
