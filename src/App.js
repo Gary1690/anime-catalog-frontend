@@ -33,6 +33,7 @@ class App extends React.Component {
   }
 
   filterBy = () => {
+    debugger
     return this.state.animes.filter(anime => anime.title.toLowerCase().includes(this.state.filter.toLowerCase()))
   }
 

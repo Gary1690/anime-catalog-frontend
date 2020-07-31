@@ -157,8 +157,8 @@
 .review-card{
   width: 100%;
   margin: auto;
-  margin-top:2em;
-
+  margin-top:3em;
+  padding-left: 2em;
 }
 .review-card img{
   height: 5em;
@@ -166,6 +166,20 @@
   border-radius: 50%;
   display: inline-block;
 }
+
+.review-comment{
+  text-align: justify;
+  padding-top: 1.5em;
+  padding-left: 1.5em;
+}
+.review-comment p {
+  padding-left: 1.5em;
+  font-size: larger;
+}
+
+.review-rating {
+  padding-top: 1.5em;
+} 
 
 h1 {
   text-align: center;
@@ -211,4 +225,8 @@ h1 {
 
 .empty-list p {
   font-size: larger;
+}
+.anime-page-img{
+  height: 40em;
+  width: 28em;
 }

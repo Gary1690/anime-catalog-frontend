@@ -11,12 +11,12 @@ const ReviewCard = (props) => {
           />
           <span><strong>{props.user.username}</strong></span>
         </div>
-        <div className="col-8">
+        <div className="col-8 review-comment">
           <p>
           {props.content}
           </p>
         </div>
-        <div className="col-2">
+        <div className="col-2 review-rating">
           <span>{"★".repeat(props.rating)}</span>
         </div>
         

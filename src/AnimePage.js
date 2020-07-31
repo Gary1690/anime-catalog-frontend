@@ -106,7 +106,7 @@ export default class AnimePage extends Component {
       <div className="anime-wrapper">
           <div className="row show-me-border anime-detail">
             <div className="col-lg-4 show-me-borde" style={{marginRight:"em"}}>
-              <img src={img_url} alt={title} />
+              <img src={img_url} alt={title} className="anime-page-img"/>
             </div>
             <div className="col-lg-8 show-me-border">
                 <h2 style={{display:"block"}}>{title} 
@@ -121,7 +121,7 @@ export default class AnimePage extends Component {
                     null
                   }
                 </h2>
-                <h4>Screen: {screen}</h4>
+                <h4>Type: {screen}</h4>
                 <h4>Audience: {age_rating}</h4>
                 <h4>Rating: {get_rating}</h4>
                 <p>{description}</p>
